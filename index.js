@@ -85,7 +85,12 @@ async function run() {
 
     // bookings routes
     app.get("/bookings", verifyJWT, async (req, res) => {
-      console.log('came back after verify')
+      const decoded = req.decoded;
+      console.log("came back after verify", decoded);
+      if (decoded.email !== req.query.email) {
+        return res.status(403).send({ error: 1, message: "forbidden access" });
+      }
+
       let query = {};
       if (req.query?.email) {
         query = { email: req.query.email };
